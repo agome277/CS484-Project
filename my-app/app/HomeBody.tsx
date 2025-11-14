@@ -47,19 +47,22 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
   }, [department, year, term, availableSeasons]);
 
   return (
-    <div className="flex flex-col gap-3 border-1 w-fit p-6 my-10">
-      <Select
-        label="Departments"
-        items={departments}
-        onChange={setDepartment}
-        value={department}
-      />
-      <Select label="Terms" items={availableSeasons} onChange={setTerm} value={term} />
-      <Select label="Year" items={years} onChange={setYear} value={year} />
-      <Select label="Course Numbers" items={availableCourseNumbers} onChange={setSelectedCourse} value={selectedCourse} />
-      <Button href={`./graph?d=${department}&t=${term}&y=${year}&n=${selectedCourse}`}>
-        Get Graph
-      </Button>
+    <div>
+      <Button href="./easyCourses">Find Easy Courses</Button>
+      <div className="flex flex-col gap-3 border-1 w-fit p-6 my-10">
+        <Select
+          label="Departments"
+          items={departments}
+          onChange={setDepartment}
+          value={department}
+          />
+        <Select label="Terms" items={availableSeasons} onChange={setTerm} value={term} />
+        <Select label="Year" items={years} onChange={setYear} value={year} />
+        <Select label="Course Numbers" items={availableCourseNumbers} onChange={setSelectedCourse} value={selectedCourse} />
+        <Button href={`./graph?d=${department}&t=${term}&y=${year}&n=${selectedCourse}`}>
+          Get Graph
+        </Button>
+      </div>
     </div>
   );
 }

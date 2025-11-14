@@ -1,0 +1,27 @@
+#easy-course-find-button {
+    align-self: flex-center;
+    border-radius: 4px;
+    padding: 1px 8px;
+    margin-top: 10px;
+
+    color: #F2F7EB;
+    background-color: #D50032;
+}
+
+#easy-courses-table{
+    margin-top: 20px;
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+
+    th{
+        border: 1px solid black;
+        padding: 5px;
+        background-color: #D50032;
+        color: #F2F7EB;
+        padding: 10px 10px;
+    }
+    td{
+        border-bottom: 1px solid black;
+    }
+}
