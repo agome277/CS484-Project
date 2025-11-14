@@ -48,7 +48,7 @@ semesterRouter.get("/courses", (req: Request, res: Response) => {
         Where c.dept_name = ? and s.year = ? and s.season = ?
         Order by c.course_nbr ASC;
       `   
-    ).all(department, year, season) as { course_nbr: number }[];
+    ).all(department, year, season) as { course_nbr: string }[];
   const courseNumbers = rows.map((r) => r.course_nbr);
 
   if (!courseNumbers) {

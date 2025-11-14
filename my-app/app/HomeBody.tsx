@@ -5,14 +5,14 @@ import Select from "./_components/Select";
 
 // TODO: make this page type safe
 
-export default function HomeBody({ departments = [], years = [], cNums = [] }) {
+export default function HomeBody({ departments = [{dept_name: ""}], years = [{year: -1}], cNums = [{course_nbr: ""}] }) {
   // department, term, year, and course num used for querying
   const [department, setDepartment] = useState<string>(departments[0].dept_name ?? "");
   const [year, setYear] = useState<number>(years[0].year ?? 0);
   const [term, setTerm] = useState<string>("FA");
   const [availableSeasons, setAvailableSeasons] = useState<string[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<number>(cNums[0].course_nbr ?? 0);
-  const [availableCourseNumbers, setAvailableCourseNumbers] = useState<number[]>(cNums);
+  const [selectedCourse, setSelectedCourse] = useState<string>(cNums[0].course_nbr ?? "");
+  const [availableCourseNumbers, setAvailableCourseNumbers] = useState<string[]>(cNums.map(c => c.course_nbr) ?? []);
 
   // useEffect updates list of course numbers every time department changes
   useEffect(() => {
@@ -25,18 +25,15 @@ export default function HomeBody({ departments = [], years = [], cNums = [] }) {
       );
       const availableSeasonsData = await availableTermsRes.json();
       setAvailableSeasons(availableSeasonsData);
-      console.log(availableSeasonsData);
       setTerm(availableSeasonsData[0] ?? "FA");
 
       //fetch available course numbers
       const availableCourseNumbersRes = await fetch(
         `http://localhost:3001/semesters/courses?department=${department}&year=${year}&season=${term}`
       );
-      const availableCourseNumbersData: number[] = await availableCourseNumbersRes.json();
+      const availableCourseNumbersData: string[] = await availableCourseNumbersRes.json();
       setAvailableCourseNumbers(availableCourseNumbersData);
-      console.log("Available courses: ", availableCourseNumbersData);
-
-      setSelectedCourse(availableCourseNumbersData[0] ?? 0);
+      setSelectedCourse(availableCourseNumbersData[0] ?? "");
     };
     fetchData();
   }, [department, year, term]);

@@ -1,8 +1,14 @@
 interface SelectProps<T> {
   label?: string;
-  items: T[];
-  onChange: (val: any) => void; // TODO: type safety here
+  items: string[] | number[] | { [key: string]: string | number }[];
+  onChange: (value: T) => void;
 }
+
+const termMap: { [key: string]: string } = {
+  "FA": "Fall",
+  "SP": "Spring",
+  "SU": "Summer"
+};
 
 // simple select component for now, generalizes object so that it can iterate through it like
 // a list and ignore the key name...
@@ -14,7 +20,7 @@ export default function Select<T>({ label, items, onChange }: SelectProps<T>) {
       <label>{label}</label>
       <select
         className="border-1 w-65"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {onChange(e.target.value as T)}}
       >
         {items.map((item, index) => {
           let val;
@@ -23,9 +29,11 @@ export default function Select<T>({ label, items, onChange }: SelectProps<T>) {
           } else {
             val = Object.values(item)[0];
           }
+          //?? means if val is null default to index as key
+          //conditional rendering if label is "Terms", map value to full term name otherwise just show value
           return (
             <option key={val ?? index} value={val}>
-              {val}
+              {(label == "Terms") ? termMap[val] : val}
             </option>
           );
         })}
