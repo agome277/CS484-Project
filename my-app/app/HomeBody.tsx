@@ -33,9 +33,10 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
       );
       const availableCourseNumbersData: string[] = await availableCourseNumbersRes.json();
       setAvailableCourseNumbers(availableCourseNumbersData);
+      setSelectedCourse(availableCourseNumbersData[0] ?? "");
     };
     fetchData();
-  }, [department, year, term, selectedCourse]);
+  }, [department, year, term]);
 
   return (
     <div className="flex flex-col gap-3 border-1 w-fit p-6 my-10">
