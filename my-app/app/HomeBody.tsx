@@ -25,7 +25,7 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
       );
       const availableSeasonsData = await availableTermsRes.json();
       setAvailableSeasons(availableSeasonsData);
-      setTerm(availableSeasonsData[0] ?? "FA");
+      setTerm(availableSeasonsData[0] ?? "FA"); //necessary to set term here so that course numbers fetch correctly when FA is not available
 
       //fetch available course numbers
       const availableCourseNumbersRes = await fetch(
@@ -33,10 +33,9 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
       );
       const availableCourseNumbersData: string[] = await availableCourseNumbersRes.json();
       setAvailableCourseNumbers(availableCourseNumbersData);
-      setSelectedCourse(availableCourseNumbersData[0] ?? "");
     };
     fetchData();
-  }, [department, year, term]);
+  }, [department, year, term, selectedCourse]);
 
   return (
     <div className="flex flex-col gap-3 border-1 w-fit p-6 my-10">

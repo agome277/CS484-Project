@@ -22,21 +22,27 @@ export default function Select<T>({ label, items, onChange }: SelectProps<T>) {
         className="border-1 w-65"
         onChange={(e) => {onChange(e.target.value as T)}}
       >
-        {items.map((item, index) => {
-          let val;
-          if (typeof item == "string") {
-            val = item;
-          } else {
-            val = Object.values(item)[0];
-          }
-          //?? means if val is null default to index as key
-          //conditional rendering if label is "Terms", map value to full term name otherwise just show value
-          return (
-            <option key={val ?? index} value={val}>
-              {(label == "Terms") ? termMap[val] : val}
-            </option>
-          );
-        })}
+        {
+          (items.length <= 0) ? (
+            <option key={"none"} value={""}>No options available</option>
+          ) : (
+            items.map((item, index) => {
+              let val;
+              if (typeof item == "string") {
+                val = item;
+              } else {
+                val = Object.values(item)[0];
+              }
+              //?? means if val is null default to index as key
+              //conditional rendering if label is "Terms", map value to full term name otherwise just show value
+              return (
+                <option key={val ?? index} value={val}>
+                  {(label == "Terms") ? termMap[val] : val}
+                </option>
+              );
+            })
+          )
+        }
       </select>
     </div>
   );
