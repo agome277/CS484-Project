@@ -13,30 +13,38 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
   const [availableSeasons, setAvailableSeasons] = useState<string[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<string>(cNums[0].course_nbr ?? "");
   const [availableCourseNumbers, setAvailableCourseNumbers] = useState<string[]>(cNums.map(c => c.course_nbr) ?? []);
-
-  // useEffect updates list of course numbers every time department changes
+  // When department or year change, fetch available seasons and set a default term
   useEffect(() => {
-    const fetchData = async () => {
+    // When department or year change, fetch available seasons and set a default term
+    const fetchSeasons = async () => {
       if (department === "") return;
-      
-      // fetch available terms for selected department and year
+
       const availableTermsRes = await fetch(
         `http://localhost:3001/semesters?department=${department}&year=${year}`
       );
-      const availableSeasonsData = await availableTermsRes.json();
+      const availableSeasonsData: string[] = await availableTermsRes.json();
       setAvailableSeasons(availableSeasonsData);
-      setTerm(availableSeasonsData[0] ?? "FA"); //necessary to set term here so that course numbers fetch correctly when FA is not available
+      const defaultTerm = availableSeasonsData[0] ?? "FA";
+      setTerm(defaultTerm);
+    };
+    fetchSeasons();
+  }, [department, year]);
 
-      //fetch available course numbers
+  // When department, year, or term changes, fetch course numbers for the chosen season
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (department === "") return;
+      const seasonToUse = term ?? (availableSeasons[0] ?? "FA");
+
       const availableCourseNumbersRes = await fetch(
-        `http://localhost:3001/semesters/courses?department=${department}&year=${year}&season=${term}`
+        `http://localhost:3001/semesters/courses?department=${department}&year=${year}&season=${seasonToUse}`
       );
       const availableCourseNumbersData: string[] = await availableCourseNumbersRes.json();
       setAvailableCourseNumbers(availableCourseNumbersData);
       setSelectedCourse(availableCourseNumbersData[0] ?? "");
     };
-    fetchData();
-  }, [department, year, term]);
+    fetchCourses();
+  }, [department, year, term, availableSeasons]);
 
   return (
     <div className="flex flex-col gap-3 border-1 w-fit p-6 my-10">
@@ -44,10 +52,11 @@ export default function HomeBody({ departments = [{dept_name: ""}], years = [{ye
         label="Departments"
         items={departments}
         onChange={setDepartment}
+        value={department}
       />
-      <Select label="Terms" items={availableSeasons} onChange={setTerm} />
-      <Select label="Year" items={years} onChange={setYear} />
-      <Select label="Course Numbers" items={availableCourseNumbers} onChange={setSelectedCourse} />
+      <Select label="Terms" items={availableSeasons} onChange={setTerm} value={term} />
+      <Select label="Year" items={years} onChange={setYear} value={year} />
+      <Select label="Course Numbers" items={availableCourseNumbers} onChange={setSelectedCourse} value={selectedCourse} />
       <Button href={`./graph?d=${department}&t=${term}&y=${year}&n=${selectedCourse}`}>
         Get Graph
       </Button>

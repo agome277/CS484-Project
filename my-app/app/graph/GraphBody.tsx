@@ -86,7 +86,7 @@ const GraphBody = ({ data }: { data: Course[] }) => {
       </div>
       {/* Graphs */}
       {chartData.map((cData, index) => {
-        const { A, B, C, D, F, grade_regs, W, S, U } = data[index];
+        const { A, B, C, D, F, grade_regs, W, S} = data[index];
         return (
           <div key={index} className="border-1 mx-3 p-3">
             <Bar data={cData} options={chartOptions} />
