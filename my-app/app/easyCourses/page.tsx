@@ -49,31 +49,33 @@ export default function EasyCoursesPage() {
             setEasyCoursesMap(newArray);
         };
         fetchEasyCourses(); 
-        console.log(easyCoursesMap);
     }
 
     return (
         <div className="flex flex-col items-center py-10">
+            <div className="flex flex-col items-center">
                 <Select
                     label="Departments"
                     items={departmentArray}
                     onChange={setSelectedDepartment}
                     value={selectedDepartment}
-                />
+                    />
                 <Select
                     label="Course Levels"
                     items={courseLevels}
                     onChange={setSelectedLevel}
                     value={selectedLevel}
-                />
+                    />
                 <button id="easy-course-find-button" onClick={findEasyCourseHandler}>Find</button>
-            <div className="flex flex-col">
+            </div>
+            <div className="easy-courses-results-container">
+                <div className="flex flex-col">
                 {(easyCoursesMap.size > 0) ? (
                     Array.from(easyCoursesMap.entries()).map(([courseKey, courses], index) => (
                         <table className="courses-table" key={`${courseKey}-${index}`}>
                                 <thead>
                                     <tr>
-                                        <th id="course-subject-number-header" colSpan={2}>{courses[0].subj_cd + " " + courses[0].course_nbr}</th>
+                                        <th id={courseKey} className="course-subject-number-header" colSpan={2}>{courses[0].subj_cd + " " + courses[0].course_nbr}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,7 +84,7 @@ export default function EasyCoursesPage() {
                                         <th>Average GPA</th>
                                     </tr>
                         {courses.map((course, index) => (
-                                    <tr className="courses-entries-row" key={`${courseKey}-${index}`}>
+                            <tr className="courses-entries-row" key={`${courseKey}-${index}`}>
                                         <th>{course.instructor}</th>
                                         <th>{course.avg_gpa.toFixed(2)}</th>
                                     </tr>
@@ -93,6 +95,7 @@ export default function EasyCoursesPage() {
                 ) : (
                     <p>No entries</p>
                 )}
+                </div>
             </div>
         </div>
     );

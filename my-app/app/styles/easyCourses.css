@@ -1,11 +1,23 @@
 #easy-course-find-button {
     align-self: flex-center;
     border-radius: 4px;
-    padding: 1px 8px;
+    padding: 0.15rem;
+    width: 100%;
     margin-top: 10px;
-
     color: #F2F7EB;
     background-color: #D50032;
+
+    &:hover {
+        background-color: #ff003c;
+        cursor: pointer;
+    }
+}
+
+.easy-courses-results-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
 }
 
 .courses-table{
@@ -14,7 +26,7 @@
     margin: 10px 0px;
 }
 
-#course-subject-number-header{
+.course-subject-number-header{
     text-align: left;
     column-span: all;
     background-color: #D50032;
