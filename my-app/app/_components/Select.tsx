@@ -16,30 +16,37 @@ const termMap: { [key: string]: string } = {
 // takes in a label, list of objects used to display each option, and an onChange function
 // which will just be a useState and change the associated state to the selected value
 export default function Select<T>({ label, items, onChange, value }: SelectProps<T>) {
+  const firstIsNumber = items.length > 0 && typeof items[0] === "number";
   return (
     <div className="flex flex-col gap-2">
       <label>{label}</label>
       <select
         className="border-1 w-65"
         value={String(value ?? "")}
-        onChange={(e) => {onChange(e.target.value as unknown as T)}}
+        onChange={(e) => {
+          const raw = e.target.value;
+          if (firstIsNumber) {
+            onChange((Number(raw) as unknown) as T);
+          } else {
+            onChange((raw as unknown) as T);
+          }
+        }}
       >
         {
           (items.length <= 0) ? (
             <option key={"none"} value={""}>No options available</option>
           ) : (
             items.map((item, index) => {
-              let val;
-              if (typeof item == "string") {
-                val = item;
-              } else {
-                val = Object.values(item)[0];
+              let val: string | number | undefined;
+              if (typeof item === "string" || typeof item === "number") {
+                val = item as string | number;
+              } else if (item && typeof item === "object") {
+                val = Object.values(item)[0] as string | number | undefined;
               }
-              //?? means if val is null default to index as key
               //conditional rendering if label is "Terms", map value to full term name otherwise just show value
               return (
-                <option key={String(val ?? index)} value={String(val)}>
-                  {(label == "Terms") ? termMap[String(val)] : String(val)}
+                <option key={String(val ?? index)} value={String(val ?? "") }>
+                  {(label == "Terms") ? termMap[String(val ?? "")] : String(val ?? "")}
                 </option>
               );
             })
