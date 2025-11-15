@@ -1,6 +1,6 @@
 "use client";
 import {useRouter} from "next/navigation";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./_components/Button";
 import Select from "./_components/Select";
 
@@ -20,11 +20,14 @@ export default function HomeBody() {
   //State for course numbers
   const [courseNumbersArr, setCourseNumbersArr] = useState<string[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
+  
+  const isLoading = useRef(true);
+  const lastFetchedKeyRef = useRef<string>("");
 
   //On page load, fetch departments and years from backend
   useEffect(() => {
-    let isMounted = true;
     const fetchInitialData = async () => {
+      console.log("Inside fetchInitialData useEffect");
       //Fetch departments and convert to array of strings
       const departmentsRes = await fetch("http://localhost:3001/department");
       const departmentsData: { dept_name: string }[] = await departmentsRes.json();
@@ -50,29 +53,35 @@ export default function HomeBody() {
       const coursesData: string[] = await coursesRes.json();
     
       const temp_yearsArr: number[] = yearsData.map((y) => y.year);
-      if (isMounted) {
-        //Set state arrays
-        setDepartmentsArr(temp_deptNames);
-        setYearsArr(temp_yearsArr);
-        setSeasonsArr(seasonsData);
-        setCourseNumbersArr(coursesData);
-        //Set default selected department, year, season, and course
-        setSelectedDepartment(temp_deptNames[0]);
-        setSelectedYear(temp_yearsArr[0]);
-        setSelectedSeason(seasonsData[0] || "FA");
-        setSelectedCourse(coursesData[0] || "");
-      }
+      //Set state arrays
+      setDepartmentsArr(temp_deptNames);
+      setYearsArr(temp_yearsArr);
+      setSeasonsArr(seasonsData);
+      setCourseNumbersArr(coursesData);
+      //Set default selected department, year, season, and course
+      setSelectedDepartment(temp_deptNames[0]);
+      setSelectedYear(temp_yearsArr[0]);
+      setSelectedSeason(seasonsData[0] || "FA");
+      setSelectedCourse(coursesData[0] || "");
+      lastFetchedKeyRef.current = `${temp_deptNames[0]}-${temp_yearsArr[0]}-${seasonsData[0]}`;
+      isLoading.current = false;
     };
     fetchInitialData();
-
-    return() =>{
-      isMounted = false;
-    };
   }, []);
 
   //When selected department, year, or season changes, update course numbers
   useEffect(() => {
+    if(isLoading.current){
+      console.log("Initial loading in progress, skipping fetch");
+      return;
+    };
+    const currentKey = `${selectedDepartment}-${selectedYear}-${selectedSeason}`;
+    if(currentKey === lastFetchedKeyRef.current){
+      console.log("No need to fetch, selection unchanged");
+      return;
+    }
     const fetchCourseNumbers = async () => {
+      console.log("Inside fetchCourseNumbers useEffect");
       //get valid seasons
       const seasonsRes = await fetch(
         `http://localhost:3001/semesters?department=${selectedDepartment}&year=${selectedYear}`
@@ -91,6 +100,7 @@ export default function HomeBody() {
       const coursesData: string[] = await coursesRes.json();
       setCourseNumbersArr(coursesData);
       setSelectedCourse(coursesData[0] || "");
+      lastFetchedKeyRef.current = currentKey;
     };
     fetchCourseNumbers();
   }, [selectedDepartment, selectedYear, selectedSeason]);
