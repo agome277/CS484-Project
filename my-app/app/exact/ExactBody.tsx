@@ -30,10 +30,11 @@ export default function ExactBody() {
 
   const [loaded, setLoaded] = useState(false);
 
+  const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
   // initial fetch sets all selections with persistence
   useEffect(() => {
     const fetchInitialData = async () => {
-      const deptsRes = await fetch("http://localhost:3001/department");
+      const deptsRes = await fetch(`${BASE}/department`);
       // const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
       // await delay(1000); // artificial delay for loading demo
       const depts: { subj_cd: string; dept_name: string }[] = (
@@ -54,7 +55,7 @@ export default function ExactBody() {
 
       // fetch years
       const yearsRes = await fetch(
-        `http://localhost:3001/year?s=${encodeURIComponent(
+        `${BASE}/year?s=${encodeURIComponent(
           currentDept.subj_cd
         )}&d=${encodeURIComponent(currentDept.dept_name)}`
       );
@@ -67,7 +68,7 @@ export default function ExactBody() {
 
       // fetch terms
       const termsRes = await fetch(
-        `http://localhost:3001/semesters?department=${encodeURIComponent(
+        `${BASE}/semesters?department=${encodeURIComponent(
           currentDept.dept_name
         )}&subj=${encodeURIComponent(
           currentDept.subj_cd
@@ -82,7 +83,7 @@ export default function ExactBody() {
 
       // fetch courses
       const coursesRes = await fetch(
-        `http://localhost:3001/semesters/courses?subj=${encodeURIComponent(
+        `${BASE}/semesters/courses?subj=${encodeURIComponent(
           currentDept.subj_cd
         )}&department=${encodeURIComponent(
           currentDept.dept_name
@@ -112,9 +113,9 @@ export default function ExactBody() {
 
     const fetchYears = async () => {
       const res = await fetch(
-        `http://localhost:3001/year?s=${encodeURIComponent(
-          subj
-        )}&d=${encodeURIComponent(department)}`
+        `${BASE}/year?s=${encodeURIComponent(subj)}&d=${encodeURIComponent(
+          department
+        )}`
       );
       const data = await res.json();
       setYears(data);
@@ -131,7 +132,7 @@ export default function ExactBody() {
 
     const fetchTerms = async () => {
       const res = await fetch(
-        `http://localhost:3001/semesters?department=${encodeURIComponent(
+        `${BASE}/semesters?department=${encodeURIComponent(
           department
         )}&subj=${encodeURIComponent(subj)}&year=${encodeURIComponent(year)}`
       );
@@ -150,7 +151,7 @@ export default function ExactBody() {
 
     const fetchCourses = async () => {
       const res = await fetch(
-        `http://localhost:3001/semesters/courses?subj=${encodeURIComponent(
+        `${BASE}/semesters/courses?subj=${encodeURIComponent(
           subj
         )}&department=${encodeURIComponent(
           department

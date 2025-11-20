@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Select from "../_components/Select";
-import "../styles/easyCourses.css";
+import "../_styles/easyCourses.css";
 import SearchableSelect from "../_components/SearchableSelect";
 import { url } from "inspector";
 import Card from "../_components/Card";
@@ -14,7 +14,7 @@ type EasyCourse = {
   instructor: string;
   avg_gpa: number;
 };
-
+const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
 export default function EasyCoursesPage() {
   const courseLevels: string[] = ["all", "100", "200", "300", "400", "500"];
   const [departmentArray, setDepartmentArray] = useState<string[]>([]);
@@ -26,7 +26,7 @@ export default function EasyCoursesPage() {
 
   useEffect(() => {
     const fetchDepartments = async () => {
-      const res = await fetch("http://localhost:3001/department");
+      const res = await fetch(`${BASE}/department`);
       const data1 = await res.json();
       const data = data1.splice(1);
       setDepartmentArray(
@@ -45,7 +45,7 @@ export default function EasyCoursesPage() {
       const [deptName, subjCode] = selectedDepartment.split(" - ");
 
       const easyCoursesRes = await fetch(
-        `http://localhost:3001/statistics/easy?department=${encodeURIComponent(
+        `${BASE}/statistics/easy?department=${encodeURIComponent(
           deptName
         )}&subj=${encodeURIComponent(subjCode)}&level=${encodeURIComponent(
           selectedLevel
