@@ -14,6 +14,16 @@ type EasyCourse = {
   instructor: string;
   avg_gpa: number;
 };
+
+// button styling for this page
+const buttonStyle = {
+  color: "#d50032",
+  textColor: "white",
+  hoverColor: "#ff003c",
+  w: 120,
+  h: 30,
+};
+
 const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
 export default function EasyCoursesPage() {
   const courseLevels: string[] = ["all", "100", "200", "300", "400", "500"];
@@ -40,7 +50,7 @@ export default function EasyCoursesPage() {
     fetchDepartments();
   }, []);
 
-  async function findEasyCourseHandler(): Promise<void> {
+  async function findEasyCourseHandler() {
     const fetchEasyCourses = async () => {
       const [deptName, subjCode] = selectedDepartment.split(" - ");
 
@@ -94,14 +104,13 @@ export default function EasyCoursesPage() {
             onChange={setSelectedLevel}
             value={selectedLevel}
           />
-          <div className="flex flex-col gap-4">
-            <button
-              id="easy-course-find-button"
-              onClick={findEasyCourseHandler}
-            >
+          <div className="flex flex-col gap-2 mt-4">
+            <Button {...buttonStyle} onClick={findEasyCourseHandler}>
               Find
-            </button>
-            <Button href="/">Back</Button>
+            </Button>
+            <Button {...buttonStyle} href="/">
+              Back
+            </Button>
           </div>
         </div>
         <div className="easy-courses-results-container">
