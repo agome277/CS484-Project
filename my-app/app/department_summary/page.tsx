@@ -45,7 +45,7 @@ export default function EasyCoursesPage() {
       const [deptName, subjCode] = selectedDepartment.split(" - ");
 
       const easyCoursesRes = await fetch(
-        `${BASE}/statistics/easy?department=${encodeURIComponent(
+        `${BASE}/statistics/all?department=${encodeURIComponent(
           deptName
         )}&subj=${encodeURIComponent(subjCode)}&level=${encodeURIComponent(
           selectedLevel
