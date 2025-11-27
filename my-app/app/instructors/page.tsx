@@ -11,6 +11,7 @@ const Instructor = () => {
   const [instructorInfo, setInstructorInfo] = useState<
     { title: string; avg_gpa: number }[]
   >([]);
+  const [totalAvgGPA, setTotalAvgGPA] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchInstructors = async () => {
@@ -32,6 +33,17 @@ const Instructor = () => {
       const data = await res.json();
       console.log("instructor info data", data);
       setInstructorInfo(data);
+      const gpas = data
+        .map((course: { avg_gpa: number }) => course.avg_gpa)
+        .filter((gpa: number) => gpa !== 0);
+
+      if (gpas.length > 0) {
+        const avgGPA =
+          gpas.reduce((sum: number, gpa: number) => sum + gpa, 0) / gpas.length;
+        setTotalAvgGPA(avgGPA);
+      } else {
+        setTotalAvgGPA(null);
+      }
     };
     fetchInfo();
   }, [instructor]);
@@ -54,6 +66,11 @@ const Instructor = () => {
           {instructor ? (
             <div>
               <p>{instructor}</p>
+              <p>
+                {`Total Average GPA: ${
+                  totalAvgGPA !== null ? totalAvgGPA.toFixed(2) : "No GPA data"
+                }`}
+              </p>
               <h3 className="text-md font-semibold mt-4 mb-2">
                 Courses Taught:
               </h3>
