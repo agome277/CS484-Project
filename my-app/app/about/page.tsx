@@ -1,8 +1,10 @@
+import Link from "next/link";
 import "../_styles/about-page.css";
 
 export default function About() {
     return (
         <div className="flex flex-col justify-center mx-10 my-10">
+            <Link href="/" id="about-home-button">Home</Link>
             <div className="app-description-section">
                 <h1 className="about-h1">About This App</h1>
                 <p>
