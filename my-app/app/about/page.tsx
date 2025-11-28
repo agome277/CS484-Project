@@ -39,6 +39,8 @@ export default function About() {
 
             <div className="how-to-use-section">
                 <h1 className="about-h1">How to Use</h1>
+                <p><b>Verification:</b> Users must first verify their UIC email by receiving a verification code sent to their UIC email address.</p>
+                <br/>
                 <p>There will be 4 different sections to explore the data:</p>
                 <ul className="about-ul">
                     <li>
