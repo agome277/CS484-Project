@@ -14,6 +14,11 @@ const Home = () => {
             See Department Summary
           </button>
         </Link>
+        <Link href="./easy_courses">
+          <button className="border w-80 h-15 rounded-md hover:bg-gray-200 hover:cursor-pointer">
+            Find Easy Courses
+          </button>
+        </Link>
         <Link href="./exact">
           <button className="border w-80 h-15 rounded-md hover:bg-gray-200 hover:cursor-pointer">
             See Exact Courses
