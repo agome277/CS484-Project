@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, Activity } from "react";
+import { useEffect, useState, useRef, Activity } from "react";
 import SearchableSelect from "../_components/SearchableSelect";
 import Select from "../_components/Select";
 import "../_styles/easy-courses.css";
-import { title } from "process";
+import Link from "next/link";
 
 type easyCourseGpa = {
   subj_cd: string;
@@ -48,6 +48,8 @@ const Easy_courses = () => {
     const [allowRenderTable, setAllowRenderTable] = useState<boolean>(false);
     //Track if hide button was clicked
     const [hideMenu, setHideMenu] = useState<boolean>(false);
+    //Prevent user from requesting the same data multiple times
+    const fetchedDataRef = useRef<string>("");
     
     useEffect(() => {
         const fetchData = async () => {
@@ -114,7 +116,10 @@ const Easy_courses = () => {
                 setAllowRenderTable(false);
             }
         }
-        fetchEasyCourses();
+        if(fetchedDataRef.current !== `${selectedDepartment}-${selectedCourseLevel}-${selectedYear}`) {
+          fetchEasyCourses();
+          fetchedDataRef.current = `${selectedDepartment}-${selectedCourseLevel}-${selectedYear}`;
+        }
     }
     
     function getGpaColor(gpa: number): string {
@@ -212,6 +217,7 @@ const Easy_courses = () => {
 
     return (
         <div className="flex flex-col">
+          <Link href="/" id="easy-courses-back-button" className="ml-4 mt-4">Back</Link>
           <div className="flex flex-col items-center">
             <Activity mode={hideMenu ? "hidden" : "visible"}>
               <div className="flex flex-col items-center">
