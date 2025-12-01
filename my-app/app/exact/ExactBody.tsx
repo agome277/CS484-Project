@@ -218,7 +218,13 @@ export default function ExactBody() {
         <div className="flex justify-evenly">
           <Button href="./">Back</Button>
           <Button
-            href={`./graph?type=exact&d=${subj}&t=${term}&y=${year}&n=${courseNumber}`}
+            href={`./graph?type=exact&d=${encodeURIComponent(
+              department
+            )}&s=${encodeURIComponent(subj)}&t=${encodeURIComponent(
+              term
+            )}&y=${encodeURIComponent(year)}&n=${encodeURIComponent(
+              courseNumber
+            )}`}
           >
             Get Graph
           </Button>

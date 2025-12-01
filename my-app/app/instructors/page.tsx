@@ -3,27 +3,36 @@ import { useState, useEffect } from "react";
 import Card from "../_components/Card";
 import SearchableSelect from "../_components/SearchableSelect";
 import Button from "../_components/Button";
+import { useStore } from "../store";
+import { Course } from "../types";
+import Link from "next/link";
 
 const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
 const Instructor = () => {
-  const [instructor, setInstructor] = useState<string>("");
+  // const [instructor, setInstructor] = useState<string>("");
   const [instructors, setInstructors] = useState<{ instructor: string }[]>([]);
   const [instructorInfo, setInstructorInfo] = useState<
-    { title: string; avg_gpa: number }[]
+    (Course & { avg_gpa: number })[]
   >([]);
   const [totalAvgGPA, setTotalAvgGPA] = useState<number | null>(null);
+  const { instructor, setInstructor } = useStore();
 
+  // initial fetch of list of professors
   useEffect(() => {
     const fetchInstructors = async () => {
       const res = await fetch(`${BASE}/instructor`);
       const data = await res.json();
       const instructorData = data.splice(1); // remove , at start
       setInstructors(instructorData);
-      setInstructor(instructorData[0]?.instructor || "");
+      if (!instructor || instructor === "") {
+        // either stored instructor or first one from fetch
+        setInstructor(instructorData[0]?.instructor || "");
+      }
     };
     fetchInstructors();
   }, []);
 
+  // fetches info for selected professors
   useEffect(() => {
     const fetchInfo = async () => {
       if (!instructor) return;
@@ -50,6 +59,7 @@ const Instructor = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      {/* Select instructor */}
       <Card>
         <SearchableSelect
           label="Instructors"
@@ -60,6 +70,7 @@ const Instructor = () => {
         />
         <Button href="/">Back</Button>
       </Card>
+      {/* Instructor's info */}
       <Card>
         <div className="w-120">
           <h2 className="text-lg font-bold mb-4">Selected Instructor</h2>
@@ -78,10 +89,19 @@ const Instructor = () => {
                 <ul className="list-disc list-inside">
                   {instructorInfo.map((course, index) => (
                     <li key={index}>
-                      {course.title} -{" "}
-                      {course.avg_gpa !== 0
-                        ? `Average GPA: ${course.avg_gpa.toFixed(2)}`
-                        : "No GPA data"}
+                      {/* Links to average graph of instructor */}
+                      <Link
+                        href={`./graph?type=instructor&s=${encodeURIComponent(
+                          course.subj_cd
+                        )}&d=${encodeURIComponent(
+                          course.dept_name
+                        )}&n=${encodeURIComponent(course.course_nbr)}`}
+                      >
+                        {course.title} -{" "}
+                        {course.avg_gpa !== 0
+                          ? `Average GPA: ${course.avg_gpa.toFixed(2)}`
+                          : "No GPA data"}
+                      </Link>
                     </li>
                   ))}
                 </ul>

@@ -28,12 +28,19 @@ const PieChart = ({ data }: { data: Course }) => {
     ],
     borderRadius: 0,
   };
-  if (data.A + data.B + data.C + data.D + data.F + data.NR > 0) {
+  if (data.A + data.B + data.C + data.D + data.F > 0) {
     labels = ["A", "B", "C", "D", "F", "Not Reported"];
-    dataset.data = [data.A, data.B, data.C, data.D, data.F, data.NR];
+    dataset.data = [
+      Math.ceil(data.A),
+      Math.ceil(data.B),
+      Math.ceil(data.C),
+      Math.ceil(data.D),
+      Math.ceil(data.F),
+      Math.ceil(data.NR),
+    ];
   } else if (data.S > 0 || data.U > 0) {
-    labels = ["S", "U"];
-    dataset.data = [data.S, data.U];
+    labels = ["S", "U", "Not Reported"];
+    dataset.data = [Math.ceil(data.S), Math.ceil(data.U), Math.ceil(data.NR)];
   } else {
     labels = ["No Data Available"];
     dataset.data = [0];
@@ -57,7 +64,7 @@ const PieChart = ({ data }: { data: Course }) => {
             const value = Number(raw ?? 0);
             const dataset = context.dataset.data as number[];
             const total = dataset.reduce((accumulator, currentValue) => {
-              return accumulator + currentValue;
+              return accumulator + Math.ceil(currentValue);
             }, 0);
             const pct =
               total > 0 ? ` (${Math.round((value / total) * 100)}%)` : "";

@@ -16,8 +16,8 @@ const Home = () => {
         <Button href="./exact" w={320} h={60}>
           See Exact Courses
         </Button>
-        <Button href="./history" w={320} h={60}>
-          See Course History
+        <Button href="./average" w={320} h={60}>
+          See Course Average
         </Button>
         <Button href="./instructors" w={320} h={60}>
           See Instructors

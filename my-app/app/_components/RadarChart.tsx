@@ -11,13 +11,20 @@ const RadarChart = ({ data }: { data: Course }) => {
   let max = 0;
 
   if (data.A + data.B + data.C + data.D + data.F + data.NR > 0) {
-    labels = ["A", "B", "C", "D", "F", "Not Reported"];
-    values = [data.A, data.B, data.C, data.D, data.F, data.NR];
-    max = Math.max(data.A, data.B, data.C, data.D, data.F, data.NR);
+    labels = ["A", "B", "C", "D", "F", "NR"];
+    values = [
+      Math.ceil(data.A),
+      Math.ceil(data.B),
+      Math.ceil(data.C),
+      Math.ceil(data.D),
+      Math.ceil(data.F),
+      Math.ceil(data.NR),
+    ];
+    max = Math.ceil(Math.max(data.A, data.B, data.C, data.D, data.F, data.NR));
   } else if (data.S > 0 || data.U > 0) {
     labels = ["S", "U"];
-    values = [data.S, data.U];
-    max = Math.max(data.S, data.U);
+    values = [Math.ceil(data.S), Math.ceil(data.U)];
+    max = Math.ceil(Math.max(data.S, data.U));
   } else {
     labels = ["No Data Available"];
     values = [0];
@@ -61,7 +68,7 @@ const RadarChart = ({ data }: { data: Course }) => {
           label: (context) => {
             const value = Number(context.raw ?? 0);
             const dataset = context.dataset.data as number[];
-            const total = dataset.reduce((a, b) => a + b, 0);
+            const total = dataset.reduce((a, b) => a + Math.ceil(b), 0);
             const pct =
               total > 0 ? ` (${Math.round((value / total) * 100)}%)` : "";
             return `${context.label}: ${value}${pct}`;

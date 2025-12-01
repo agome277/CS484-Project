@@ -1,12 +1,12 @@
 // "use client";
 import ExactGraphBody from "./ExactGraphBody";
-import HistoryGraphBody from "./HistoryGraphBody";
+import AverageGraphBody from "./AverageGraphBody";
 
 export default async function Graph({
   searchParams,
 }: {
   searchParams: {
-    type: "exact" | "history";
+    type: "exact" | "average" | "instructor";
     d: string;
     t: string;
     y: number;
@@ -22,11 +22,18 @@ export default async function Graph({
 
   if (type === "exact") {
     res = await fetch(
-      `${BASE}/course/exact?dept=${d}&cn=${n}&term=${t}&year=${y}`
+      `${BASE}/course/exact?dept=${encodeURIComponent(
+        d
+      )}&subj=${encodeURIComponent(s)}&cn=${encodeURIComponent(
+        n
+      )}&term=${encodeURIComponent(t)}&year=${encodeURIComponent(y)}`
     );
-  } else if (type === "history") {
-    console.log("TESTS");
-    res = await fetch(`${BASE}/course/history?department=${d}&subj=${s}`);
+  } else if (type === "average" || type === "instructor") {
+    res = await fetch(
+      `${BASE}/course/average?department=${encodeURIComponent(
+        d
+      )}&subj=${encodeURIComponent(s)}&cn=${encodeURIComponent(n)}`
+    );
   }
 
   const data = await res!.json();
@@ -38,7 +45,9 @@ export default async function Graph({
   return (
     <div className="flex flex-col justify-center items-center py-10">
       {error === 0 && type === "exact" && <ExactGraphBody data={data} />}
-      {error === 0 && type === "history" && <HistoryGraphBody data={data} />}
+      {error === 0 && (type === "average" || type === "instructor") && (
+        <AverageGraphBody data={data} num={n} subj={s} type={type} />
+      )}
       {error === 1 && (
         <div className="border">
           <p className="px-10 py-20 font-semibold text-2xl">Course not found</p>

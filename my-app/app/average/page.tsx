@@ -117,9 +117,18 @@ export default function ExactBody() {
           onChange={setCourseNumber}
           loading={loadingCourses}
         />
+        <div className="flex items-center justify-center">
+          <Button href="./exact">Find Exact Course</Button>
+        </div>
         <div className="flex justify-evenly">
           <Button href="./">Back</Button>
-          <Button href={`./graph?type=history&s=${subj}&d=${department}`}>
+          <Button
+            href={`./graph?type=average&s=${encodeURIComponent(
+              subj
+            )}&d=${encodeURIComponent(department)}&n=${encodeURIComponent(
+              courseNumber
+            )}`}
+          >
             Get Graph
           </Button>
         </div>

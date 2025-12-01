@@ -43,7 +43,7 @@ const ExactGraphBody = ({ data }: { data: Course[] }) => {
 
       {/* Graphs */}
       {data.map((course, index) => {
-        const { A, B, C, D, F, grade_regs, W, S } = course;
+        const { A, B, C, D, F, grade_regs, W, S, U } = course;
         return (
           <div key={index} className="border mx-3 p-3 mb-7">
             {/* Bar Chart if selected */}
@@ -58,7 +58,7 @@ const ExactGraphBody = ({ data }: { data: Course[] }) => {
 
             {/* Radar Chart if selected */}
             {graphType === "radar" && (
-              <div className="w-8/10 justify-self-center">
+              <div className="w-6/10 justify-self-center">
                 <RadarChart data={data[index]} />
               </div>
             )}
@@ -68,10 +68,12 @@ const ExactGraphBody = ({ data }: { data: Course[] }) => {
               <p>Professor: {course.instructor}</p>
               <p>Total Registrations: {grade_regs}</p>
 
-              <p>
-                Average GPA:{" "}
-                {((4 * A + 3 * B + 2 * C + D) / (grade_regs - W)).toFixed(2)}
-              </p>
+              {S + U === 0 && (
+                <p>
+                  Average GPA:{" "}
+                  {((4 * A + 3 * B + 2 * C + D) / (grade_regs - W)).toFixed(2)}
+                </p>
+              )}
 
               <p>Withdraws: {W}</p>
 

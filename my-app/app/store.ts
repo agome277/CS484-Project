@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { termOptions } from "./types";
+import Instructor from "./instructors/page";
 
 interface storeType {
   year: number;
@@ -11,6 +12,7 @@ interface storeType {
   years: number[];
   terms: termOptions[];
   courseNumbers: string[];
+  instructor: string;
 
   setYear: (year: number) => void;
   setTerm: (term: termOptions) => void;
@@ -24,6 +26,7 @@ interface storeType {
   setDepartments: (
     departments: { dept_name: string; subj_cd: string }[]
   ) => void;
+  setInstructor: (instructor: string) => void;
 }
 
 export const useStore = create<storeType>((set) => ({
@@ -37,7 +40,7 @@ export const useStore = create<storeType>((set) => ({
   years: [],
   terms: [],
   courseNumbers: [],
-
+  instructor: "",
   setYear: (year) =>
     set((state) => ({
       ...state,
@@ -82,5 +85,10 @@ export const useStore = create<storeType>((set) => ({
     set((state) => ({
       ...state,
       courseNumbers: courseNumbers,
+    })),
+  setInstructor: (Instructor) =>
+    set((state) => ({
+      ...state,
+      instructor: Instructor,
     })),
 }));
