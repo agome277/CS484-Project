@@ -31,7 +31,7 @@ export default function About() {
 
             <div className="data-source-section">
                 <h2 className="about-h2">Data Source</h2>
-                <p>Data collected from <a className="about-a" rel="external noopener noreferrer" href="https://oir.uic.edu/data/student-data/grade-distribution/">https://oir.uic.edu/data/student-data/grade-distribution/</a></p>
+                <p>Data collected from <a className="about-a" rel="external noopener noreferrer" href="https://oir.uic.edu/data/student-data/grade-distribution/" target="_blank">https://oir.uic.edu/data/student-data/grade-distribution/</a></p>
                 <br/>
                 <p>Disclaimer: The data used in this application is not publicly available and is sourced from UIC&apos;s web application.
                     While efforts have been made to ensure the accuracy of the data, there may be discrepancies or errors present.
