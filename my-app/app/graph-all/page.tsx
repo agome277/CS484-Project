@@ -45,7 +45,9 @@ export default async function GraphAll({
 
       courseFetches.push(
         fetch(
-          `${BASE}/course/exact?dept=${encodeURIComponent(d)}&cn=${encodeURIComponent(
+          `${BASE}/course/exact?subj=${encodeURIComponent(
+            d
+          )}&dept=${encodeURIComponent(dp)}&cn=${encodeURIComponent(
             n
           )}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`
         ).then((r) => r.json())
