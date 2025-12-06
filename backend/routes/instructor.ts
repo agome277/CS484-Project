@@ -37,7 +37,7 @@ instructorRouter.get("/info", (req: Request, res: Response) => {
   const instructor = db
     .prepare(
       `
-        SELECT title, AVG((4 * A + 3 * B + 2 * C + D * 1.0) / (grade_regs - W)) as avg_gpa
+        SELECT title, subj_cd, dept_name, course_nbr, (4 * A + 3 * B + 2 * C + D * 1.0) / (grade_regs - W) as avg_gpa
         FROM courses
         WHERE instructor = ?
         GROUP BY title

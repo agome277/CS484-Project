@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import Button from "./_components/Button";
 import Card from "./_components/Card";
@@ -39,6 +40,18 @@ const Home = () => {
             About This App
           </button>
         </Link>
+        <Button href="./department_summary" w={320} h={60}>
+          See Department Summary
+        </Button>
+        <Button href="./exact" w={320} h={60}>
+          See Exact Courses
+        </Button>
+        <Button href="./average" w={320} h={60}>
+          See Course Average
+        </Button>
+        <Button href="./instructors" w={320} h={60}>
+          See Instructors
+        </Button>
       </div>
     </div>
   );
