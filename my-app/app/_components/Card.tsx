@@ -1,7 +1,6 @@
 import React from "react";
 interface CardProps {
   children?: React.ReactNode;
-  hoverColor?: string;
   color?: string;
   shadow?: boolean;
 }
