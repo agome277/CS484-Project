@@ -174,60 +174,62 @@ export default function ExactBody() {
   return (
     <div>
       <Card>
-        {/* Searchbar for departments */}
-        {departments.length > 0 ? (
-          <SearchableSelect
-            label="Departments"
-            items={departments}
-            value={
-              departments.find(
-                (d) => d.subj_cd === subj && d.dept_name === department
-              ) ?? departments[0]
-            } // initial value either saved or first
-            getOptionText={(d) => `${d.dept_name} - ${d.subj_cd}`} // format for the options list
-            onChange={(d) => {
-              setDepartment(d.dept_name);
-              setSubj(d.subj_cd);
-            }}
+        <div className="flex flex-col gap-3">
+          {/* Searchbar for departments */}
+          {departments.length > 0 ? (
+            <SearchableSelect
+              label="Departments"
+              items={departments}
+              value={
+                departments.find(
+                  (d) => d.subj_cd === subj && d.dept_name === department
+                ) ?? departments[0]
+              } // initial value either saved or first
+              getOptionText={(d) => `${d.dept_name} - ${d.subj_cd}`} // format for the options list
+              onChange={(d) => {
+                setDepartment(d.dept_name);
+                setSubj(d.subj_cd);
+              }}
+            />
+          ) : (
+            <Select label="Departments" items={[]} loading={true} />
+          )}
+          {/* Select bar for year, terms/seasons, and course numbers */}
+          <Select
+            label="Year"
+            items={years}
+            value={year}
+            onChange={setYear}
+            loading={loadingYears}
           />
-        ) : (
-          <Select label="Departments" items={[]} loading={true} />
-        )}
-        {/* Select bar for year, terms/seasons, and course numbers */}
-        <Select
-          label="Year"
-          items={years}
-          value={year}
-          onChange={setYear}
-          loading={loadingYears}
-        />
-        <Select
-          label="Terms"
-          items={terms}
-          value={term}
-          onChange={setTerm}
-          loading={loadingTerms}
-        />
-        <Select
-          label="Course Numbers"
-          items={courseNumbers}
-          value={courseNumber}
-          onChange={setCourseNumber}
-          loading={loadingCourses}
-        />
-        <div className="flex justify-evenly">
-          <Button href="./">Back</Button>
-          <Button
-            href={`./graph?type=exact&d=${encodeURIComponent(
-              department
-            )}&s=${encodeURIComponent(subj)}&t=${encodeURIComponent(
-              term
-            )}&y=${encodeURIComponent(year)}&n=${encodeURIComponent(
-              courseNumber
-            )}`}
-          >
-            Get Graph
-          </Button>
+          <Select
+            label="Terms"
+            items={terms}
+            value={term}
+            onChange={setTerm}
+            loading={loadingTerms}
+          />
+          <Select
+            label="Course Numbers"
+            items={courseNumbers}
+            value={courseNumber}
+            onChange={setCourseNumber}
+            loading={loadingCourses}
+          />
+          <div className="flex justify-evenly">
+            <Button href="./">Back</Button>
+            <Button
+              href={`./graph?type=exact&d=${encodeURIComponent(
+                department
+              )}&s=${encodeURIComponent(subj)}&t=${encodeURIComponent(
+                term
+              )}&y=${encodeURIComponent(year)}&n=${encodeURIComponent(
+                courseNumber
+              )}`}
+            >
+              Get Graph
+            </Button>
+          </div>
         </div>
       </Card>
     </div>

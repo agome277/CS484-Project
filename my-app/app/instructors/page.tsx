@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import Card from "../_components/Card";
 import SearchableSelect from "../_components/SearchableSelect";
 import Button from "../_components/Button";
@@ -62,64 +61,71 @@ const Instructor = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {/* Select instructor */}
-      <div className="mb-8">
+      <div className="my-8">
         <Card>
-          <SearchableSelect
-            label="Instructors"
-            items={instructors}
-            value={{ instructor: instructor }}
-            getOptionText={(i) => i.instructor}
-            onChange={(i) => setInstructor(i.instructor)}
-          />
-          <Button href="/">Back</Button>
+          <div className="flex flex-col gap-3">
+            <SearchableSelect
+              label="Instructors"
+              items={instructors}
+              value={{ instructor: instructor }}
+              getOptionText={(i) => i.instructor}
+              onChange={(i) => setInstructor(i.instructor)}
+            />
+            <Button href="/">Back</Button>
+          </div>
         </Card>
       </div>
+
       {/* Instructor's info */}
-      <Card>
-        <div className="w-120">
-          <h2 className="text-lg font-bold mb-4">Selected Instructor</h2>
-          {instructor ? (
-            <div>
-              <p>{instructor}</p>
-              <p>
-                {`Total Average GPA: ${
-                  totalAvgGPA !== null ? totalAvgGPA.toFixed(2) : "No GPA data"
-                }`}
-              </p>
-              <h3 className="text-md font-semibold mt-4 mb-2">
-                Courses Taught:
-              </h3>
-              {instructorInfo.length > 0 ? (
-                <ul className="list-disc list-inside">
-                  {instructorInfo.map((course, index) => (
-                    <li key={index}>
-                      {/* Links to average graph of instructor */}
-                      <Link
-                        href={`./graph?type=instructor&s=${encodeURIComponent(
-                          course.subj_cd
-                        )}&d=${encodeURIComponent(
-                          course.dept_name
-                        )}&n=${encodeURIComponent(course.course_nbr)}`}
-                      >
-                        {course.title} -{" "}
-                        {course.avg_gpa !== 0
-                          ? `Average GPA: ${course.avg_gpa.toFixed(2)}`
-                          : "No GPA data"}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500">
-                  No courses found for this instructor.
+      <div className="">
+        <Card>
+          <div className="w-120">
+            <h2 className="text-lg font-bold mb-4">Selected Instructor</h2>
+            {instructor ? (
+              <div>
+                <p>{instructor}</p>
+                <p>
+                  {`Total Average GPA: ${
+                    totalAvgGPA !== null
+                      ? totalAvgGPA.toFixed(2)
+                      : "No GPA data"
+                  }`}
                 </p>
-              )}
-            </div>
-          ) : (
-            <p className="text-gray-500">No instructor selected</p>
-          )}
-        </div>
-      </Card>
+                <h3 className="text-md font-semibold mt-4 mb-2">
+                  Courses Taught:
+                </h3>
+                {instructorInfo.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {instructorInfo.map((course, index) => (
+                      <li key={index}>
+                        {/* Links to average graph of instructor */}
+                        <Link
+                          href={`./graph?type=instructor&s=${encodeURIComponent(
+                            course.subj_cd
+                          )}&d=${encodeURIComponent(
+                            course.dept_name
+                          )}&n=${encodeURIComponent(course.course_nbr)}`}
+                        >
+                          {course.title} -{" "}
+                          {course.avg_gpa !== 0
+                            ? `Average GPA: ${course.avg_gpa.toFixed(2)}`
+                            : "No GPA data"}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">
+                    No courses found for this instructor.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="text-gray-500">No instructor selected</p>
+            )}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
