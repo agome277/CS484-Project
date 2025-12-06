@@ -24,29 +24,41 @@ const AverageGraphBody = ({
   const [graphType, setGraphType] = useState<GraphOptions>("bar");
 
   return (
-    <div className="flex flex-col justify-center items-center border border-amber-200 w-screen">
-      {type === "average" && <Button href="./average">Back</Button>}
-      {type === "instructor" && <Button href="./instructors">Back</Button>}
-      {/* Title */}
-      <div className="justify-items-center mb-4">
-        <h1 className="text-lg font-semibold">
-          {`${subj} ${num}: ${data[0].title}`}
-        </h1>
-      </div>
-
-      {/* Select chart type */}
-      <div className="flex gap-1">
-        <label>Graph Type:</label>
-        <select
-          className="border w-fit ml-3 mb-2 rounded-md"
-          onChange={(e) => setGraphType(e.target.value as GraphOptions)}
-        >
-          <option value="bar">Bar</option>
-          <option value="pie">Pie</option>
-          {data[0].S === 0 && data[0].U === 0 && (
-            <option value="radar">Radar</option>
-          )}
-        </select>
+    <div className="flex flex-col justify-center items-center w-screen">
+      <div className="flex flex-col w-6/10 mb-3">
+        <div className="flex items-center justify-between relative">
+          {/* Button */}
+          <div className="flex-none">
+            {type === "average" && <Button href="./average">Back</Button>}
+            {type === "instructor" && (
+              <Button href="./instructors">Back</Button>
+            )}
+          </div>
+          {/* Title */}
+          <div className="justify-items-center">
+            <h1 className="text-lg font-semibold">
+              {`${subj} ${num}: ${data[0].title}`}
+            </h1>
+            {/* symmetry */}
+          </div>
+          <div className="flex-none opacity-0 pointer-events-none">
+            <Button>Back</Button>
+          </div>
+        </div>
+        {/* Select chart type */}
+        <div className="flex gap-1 mt-6">
+          <label>Graph Type:</label>
+          <select
+            className="border w-fit ml-3 mb-2 rounded-md"
+            onChange={(e) => setGraphType(e.target.value as GraphOptions)}
+          >
+            <option value="bar">Bar</option>
+            <option value="pie">Pie</option>
+            {data[0].S === 0 && data[0].U === 0 && (
+              <option value="radar">Radar</option>
+            )}
+          </select>
+        </div>
       </div>
 
       {/* Graphs */}

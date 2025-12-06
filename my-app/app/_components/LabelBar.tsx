@@ -77,18 +77,21 @@ const GPAIcon = () => {
   );
 };
 
+// formats multiple labels in a row, needs course data to display
 const LabelBar = ({ course }: { course: Course }) => {
-  const { A, B, C, D, F, grade_regs, W, S } = course;
+  const { A, B, C, D, F, grade_regs, W, S, U } = course;
   return (
     <div className="flex flex-row h-18 gap-10 mt-4">
-      <LabelCard color="rgba(0, 100, 255, 0.25)">
-        <div className="flex flex-col gap-1 justify-center items-center">
-          <p className="flex gap-1 items-center">
-            <GPAIcon /> Average GPA
-          </p>
-          <p>{((4 * A + 3 * B + 2 * C + D) / (grade_regs - W)).toFixed(2)}</p>
-        </div>
-      </LabelCard>
+      {S + U === 0 ? (
+        <LabelCard color="rgba(0, 100, 255, 0.25)">
+          <div className="flex flex-col gap-1 justify-center items-center">
+            <p className="flex gap-1 items-center">
+              <GPAIcon /> Average GPA
+            </p>
+            <p>{((4 * A + 3 * B + 2 * C + D) / (grade_regs - W)).toFixed(2)}</p>
+          </div>
+        </LabelCard>
+      ) : null}
       <LabelCard color="rgba(0, 255, 0, 0.25)" shadow={false}>
         <div className="flex flex-col gap-1">
           {A + B + C + D + F ? (
