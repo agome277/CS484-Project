@@ -11,11 +11,13 @@ interface SearchableSelectProps<T> {
 export default function SearchableSelect<T>({
   label, // label for search box
   items, // full list of items to select from
-  value, // currently selected value
+  value, // current value
   onChange, // callback when selection changes
   getOptionText = (item) => String(item), // optional formatting function, defaults to string conversion
 }: SearchableSelectProps<T>) {
   const [search, setSearch] = useState("");
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
   // filters list based on search
   const filteredItems = useMemo(() => {
@@ -37,6 +39,54 @@ export default function SearchableSelect<T>({
     }
   }, [search, filteredItems]);
 
+  // used to preserve searches, finds an initial value passed from parent
+  useEffect(() => {
+    const idx = items.findIndex(
+      (i) => getOptionText(i) === getOptionText(value)
+    );
+    if (idx !== -1) setHighlightIndex(idx);
+  }, [value, items]);
+
+  // keeps current value highlighted on filtering or defaults to first item
+  useEffect(() => {
+    const idx = filteredItems.findIndex(
+      (i) => getOptionText(i) === getOptionText(value)
+    );
+
+    if (idx !== -1) {
+      setHighlightIndex(idx);
+    } else {
+      setHighlightIndex(0);
+    }
+  }, [filteredItems, value]);
+
+  // matches highlight/select to index
+  useEffect(() => {
+    if (selectRef.current) {
+      selectRef.current.selectedIndex = highlightIndex;
+    }
+  }, [highlightIndex]);
+
+  // handles key presses to select item with keyboard
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (filteredItems.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault(); // prevent cursor moving inside input
+      setHighlightIndex((prev) => Math.min(prev + 1, filteredItems.length - 1));
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightIndex((prev) => Math.max(prev - 1, 0));
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onChangeRef.current(filteredItems[highlightIndex]);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2 relative w-80">
       {label && <label>{label}</label>}
@@ -46,12 +96,17 @@ export default function SearchableSelect<T>({
         placeholder={`Search ${label?.toLowerCase()}...`}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       {/* Options list */}
       <select
         className="border px-2 py-1 mt-1"
         size={5}
-        value={value ? getOptionText(value) : ""}
+        value={
+          filteredItems[highlightIndex]
+            ? getOptionText(filteredItems[highlightIndex])
+            : ""
+        } // selected/highlighted item formatted correctly
         onChange={() => {}}
       >
         {filteredItems.length === 0 ? (
@@ -64,6 +119,7 @@ export default function SearchableSelect<T>({
               onMouseDown={(e) => {
                 e.preventDefault();
                 onChange(item); // handles selection, accounts for first item selection issue
+                setHighlightIndex(index); // mouse selected item index saved
               }}
             >
               {getOptionText(item)}

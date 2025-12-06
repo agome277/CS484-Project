@@ -56,7 +56,7 @@ semesterRouter.get("/courses", (req: Request, res: Response) => {
 
   console.log(
     "ddd: ",
-    `subj=${subj}&department=${department}&year=${year}&season=${season}`
+    `subj=${subj} department=${department} year=${year} season=${season}`
   );
   console.log("cnusm: ", courseNumbers);
 
