@@ -79,8 +79,8 @@ const Easy_courses = () => {
   //Show top button when scrolled down
   const [showTopButton, setShowTopButton] = useState<boolean>(false);
   const [selectedMode, setSelectedMode] = useState<
-    "gpa" | "satisfaction" | "both"
-  >("gpa");
+    "both" | "gpa" | "satisfaction"
+  >("both");
 
   const { setInstructor, setDepartment, setSubj } = useStore();
 
@@ -276,21 +276,19 @@ const Easy_courses = () => {
                     {courses.map((course, idx) => (
                       <tr key={idx}>
                         <td className="course-instructor-name-cell">
-                          <button
+                          <Link
+                            href={`/instructors?name=${encodeURIComponent(
+                              course.instructor
+                            )}`}
                             onClick={() => {
                               setInstructor(course.instructor);
                               setDepartment(course.dept_name);
                               setSubj(course.subj_cd);
                             }}
+                            className="hover:cursor-pointer"
                           >
-                            <a
-                              href={`/instructors?name=${encodeURIComponent(
-                                course.instructor
-                              )}`}
-                            >
-                              {course.instructor}
-                            </a>
-                          </button>
+                            {course.instructor}
+                          </Link>
                         </td>
                         <td
                           style={{
@@ -347,7 +345,7 @@ const Easy_courses = () => {
               ([courseKey, courses]) => (
                 <div key={courseKey} className="table-container">
                   <table>
-                    <caption className="hover:cursor-pointer">
+                    <caption className="hover:cursor-pointer hover:underline">
                       <Link
                         href={`./graph?type=average&s=${encodeURIComponent(
                           courses[0].subj_cd
@@ -369,21 +367,19 @@ const Easy_courses = () => {
                       {courses.map((course, idx) => (
                         <tr key={idx}>
                           <td className="course-instructor-name-cell">
-                            <button
+                            <Link
+                              href={`/instructors?name=${encodeURIComponent(
+                                course.instructor
+                              )}`}
                               onClick={() => {
                                 setInstructor(course.instructor);
                                 setDepartment(course.dept_name);
                                 setSubj(course.subj_cd);
                               }}
+                              className="hover:cursor-pointer"
                             >
-                              <a
-                                href={`/instructors?name=${encodeURIComponent(
-                                  course.instructor
-                                )}`}
-                              >
-                                {course.instructor}
-                              </a>
-                            </button>
+                              {course.instructor}
+                            </Link>
                           </td>
                           <td
                             title="Percentage of students that have earned satisfactory grade"
@@ -411,77 +407,75 @@ const Easy_courses = () => {
   }
 
   return (
-    <div className="w-screen flex items-center justify-center my-7">
-      <div className="w-1/2">
-        <Card>
-          <div className="flex flex-col">
-            <Button href="/" {...blueButtonStyle}>
-              Back
-            </Button>
-            <div className="flex flex-col items-center">
-              <Activity mode={hideMenu ? "hidden" : "visible"}>
-                <div className="flex flex-col items-center">
-                  <SearchableSelect
-                    label="Departments"
-                    items={departmentsArr}
-                    value={selectedDepartment}
-                    onChange={setSelectedDepartment}
+    <div className="flex items-center justify-center">
+      <div className="flex flex-col w-full h-full justify-center items-center">
+        <div id="easy-courses-menu">
+          <Button href="/" {...blueButtonStyle}>
+            Back
+          </Button>
+          <div className="flex flex-col items-center">
+            <Activity mode={hideMenu ? "hidden" : "visible"}>
+              <div className="flex flex-col items-center">
+                <SearchableSelect
+                  label="Departments"
+                  items={departmentsArr}
+                  value={selectedDepartment}
+                  onChange={setSelectedDepartment}
                   />
-                  <Select
-                    label="Course Levels"
-                    items={courseLevels}
-                    value={selectedCourseLevel}
-                    onChange={setSelectedCourseLevel}
+                <Select
+                  label="Course Levels"
+                  items={courseLevels}
+                  value={selectedCourseLevel}
+                  onChange={setSelectedCourseLevel}
                   />
-                  <Select
-                    label="Sort By"
-                    items={["gpa", "satisfaction", "both"]}
-                    value={selectedMode}
-                    onChange={(val) =>
-                      setSelectedMode(val as "gpa" | "satisfaction" | "both")
-                    }
+                <Select
+                  label="Minimum Year"
+                  items={yearsArr}
+                  value={selectedYear ?? ""}
+                  onChange={(val) => setSelectedYear(Number(val))}
                   />
-                  <Select
-                    label="Minimum Year"
-                    items={yearsArr}
-                    value={selectedYear ?? ""}
-                    onChange={(val) => setSelectedYear(Number(val))}
-                  />
-                </div>
-              </Activity>
-              <div className="flex justify-evenly w-80 my-6">
-                <Button onClick={handleFindEasyCourses} {...redButtonStyle}>
-                  Find Courses
-                </Button>
-                <Button
-                  onClick={() => setHideMenu(!hideMenu)}
-                  {...redButtonStyle}
-                >
-                  {hideMenu ? "Show" : "Hide"}
-                </Button>
-              </div>
-            </div>
-            <div id="easy-courses-results-container">
-              {showResults && allowRenderTable ? (
-                renderTable()
-              ) : (
-                <h3 className="mt-4 text-center">No results to display</h3>
-              )}
-            </div>
-            {showTopButton && (
-              <div className="fixed bottom-10 right-10">
-                <Button
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
+                <Select
+                  label="Sort By"
+                  items={["both", "gpa", "satisfaction"]}
+                  value={selectedMode}
+                  onChange={(val) =>
+                    setSelectedMode(val as "both" | "gpa" | "satisfaction")
                   }
-                  {...blueButtonStyle}
-                >
-                  Scroll to Top
-                </Button>
+                  />
               </div>
-            )}
+            </Activity>
+            <div className="flex justify-evenly w-80 my-6">
+              <button className="easy-courses-button" onClick={handleFindEasyCourses}>
+                Find Courses
+              </button>
+              <button
+                onClick={() => setHideMenu(!hideMenu)}
+                className="easy-courses-button"
+                >
+                {hideMenu ? "Show" : "Hide"}
+              </button>
+            </div>
           </div>
-        </Card>
+        </div>
+        <div id="easy-courses-results-container">
+          {showResults && allowRenderTable ? (
+            renderTable()
+          ) : (
+            <h3 className="mt-4 text-center">No results to display</h3>
+          )}
+        </div>
+        {showTopButton && (
+          <div className="fixed bottom-10 right-10">
+            <button
+              id = "scroll-to-top-button"
+              onClick={() =>
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }
+            >
+              Scroll to Top
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

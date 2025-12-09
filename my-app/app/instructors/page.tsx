@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Card from "../_components/Card";
 import SearchableSelect from "../_components/SearchableSelect";
 import { useStore } from "../store";
@@ -24,6 +25,8 @@ const Instructor = () => {
   const [totalAvgGPA, setTotalAvgGPA] = useState<number | null>(null);
   const { instructor, setInstructor } = useStore();
 
+  const searchParams = useSearchParams();
+
   // initial fetch of list of professors
   useEffect(() => {
     const fetchInstructors = async () => {
@@ -31,14 +34,36 @@ const Instructor = () => {
       const data = await res.json();
       const instructorData = data.splice(1); // remove , at start
       setInstructors(instructorData);
-      if (!instructor || instructor === "") {
-        // either stored instructor or first one from fetch
-        setInstructor(instructorData[0]?.instructor || "");
+
+      // Prefer URL query param if present
+      const paramName = searchParams?.get("name") || "";
+      if (paramName) {
+        const found = instructorData.find(
+          (i: { instructor: string }) => i.instructor === paramName
+        );
+        if (found) {
+          setInstructor(found.instructor);
+          return;
+        }
       }
+
+      // Otherwise prefer existing store value if present in list
+      if (instructor) {
+        const found = instructorData.find(
+          (i: { instructor: string }) => i.instructor === instructor
+        );
+        if (found) {
+          // keep store value
+          return;
+        }
+      }
+
+      // fallback to first instructor
+      setInstructor(instructorData[0]?.instructor || "");
     };
     fetchInstructors();
     // include searchParams in deps so we react to URL changes
-  }, []);
+  }, [searchParams]);
 
   // fetches info for selected professors
   useEffect(() => {

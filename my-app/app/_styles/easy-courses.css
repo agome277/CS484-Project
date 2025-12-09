@@ -1,5 +1,16 @@
+#easy-courses-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 800px;
+}
+
 #easy-courses-back-button {
-    border-radius: 4px;
+    border-radius: 0.5rem;
     width: fit-content;
     padding: 0.2rem 0.5rem;
     background-color: #001E62;
@@ -10,15 +21,16 @@
     }
 }
 
-#easy-courses-button-container button{
+.easy-courses-button{
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     background-color: #D50032;
     color: #F2F7EB;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.5rem;
     cursor: pointer;
     margin: 0.5rem;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
 
     &:hover{
         background-color: #ff003c;
@@ -30,19 +42,46 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
+    margin: 0 1rem;
+    margin-top: 1rem;
+    padding: 1rem 1rem;
 }
 
 .tables-container{
     display: flex;
     flex-direction: column;
-    overflow-x: auto;
-    margin: 0 1rem;
+    padding: 0 0.5rem;
 }
 
 .table-container {
     margin-bottom: 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
     table {
         width: 100%;
+        min-width: 600px;
+        margin: 0;
+    }
+}
+
+/* Mobile: allow table to shrink and wrap instead of forcing horizontal scroll */
+@media (max-width: 480px) {
+    .table-container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .table-container table {
+        min-width: 0;
+        table-layout: fixed;
+        width: 100%;
+    }
+    th, td {
+        white-space: normal;
+        overflow-wrap: anywhere;
     }
 }
 
@@ -84,21 +123,18 @@ th, td {
     }
 }
 
-.pass-rate-meter{
-    border: 1px solid #000000;
-}
-
 #scroll-to-top-button {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.8rem;
     background-color: #001E62;
     color: #F2F7EB;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.5rem;
     cursor: pointer;
     z-index: 1000;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
 
     &:hover {
         background-color: #0033a0;
