@@ -137,7 +137,7 @@ export default function EasyCoursesPage() {
                               href={`./graph?type=average&s=${encodeURIComponent(
                                 courses[0].subj_cd
                               )}&d=${encodeURIComponent(
-                                courses[0].dept_name
+                                selectedDepartment.split(" - ")[0]
                               )}&n=${encodeURIComponent(
                                 courses[0].course_nbr
                               )}`}
